@@ -9,7 +9,23 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 22.14.0
-      # Sin variables de traduccion: por defecto usa MyMemory (gratis, sin key, ver server/translate.js).
-      # Si tienes tu propio LibreTranslate self-hosted, puedes apuntar aqui:
-      # - key: LIBRETRANSLATE_URL
-      #   value: https://tu-instancia-propia.example.com
+      - key: LIBRETRANSLATE_URL
+        fromService:
+          type: web
+          name: voicemeet-libretranslate
+          property: hostport
+      # Sin esta variable, el servidor cae automaticamente a MyMemory (gratis, sin key,
+      # pero con cuota compartida poco fiable en IPs de hosting). Con el servicio de
+      # abajo, la traduccion es propia, local al contenedor, sin limite de terceros.
+
+  - type: web
+    name: voicemeet-libretranslate
+    runtime: image
+    plan: free
+    image:
+      url: docker.io/libretranslate/libretranslate:latest
+    envVars:
+      - key: LT_LOAD_ONLY
+        value: es,en,fr,de,it,pt,ja
+      - key: LT_DISABLE_WEB_UI
+        value: "true"

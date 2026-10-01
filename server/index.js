@@ -124,9 +124,9 @@ wss.on("connection", (ws) => {
         console.error("Error de traduccion:", err.message);
         // Avisamos a los dos: quien habló (para que sepa que no llegó traducido)
         // y quien escucha (para que no se quede esperando en silencio).
-        const errMsg = JSON.stringify({ type: "translate-error", message: err.message });
-        send(errMsg);
-        receiver.ws.send(errMsg);
+        const errObj = { type: "translate-error", message: err.message };
+        send(errObj);
+        receiver.ws.send(JSON.stringify(errObj));
       }
       return;
     }

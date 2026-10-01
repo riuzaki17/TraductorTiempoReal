@@ -1,6 +1,14 @@
 const fetch = require("node-fetch");
 
-const LIBRETRANSLATE_URL = process.env.LIBRETRANSLATE_URL || "http://localhost:5000";
+// Render (y otros PaaS) inyectan el host del servicio interno sin esquema (p.ej.
+// "voicemeet-libretranslate:10000" via fromService/hostport) para la red privada.
+const rawLibreTranslateUrl = process.env.LIBRETRANSLATE_URL || "";
+const LIBRETRANSLATE_URL = rawLibreTranslateUrl
+  ? rawLibreTranslateUrl.startsWith("http")
+    ? rawLibreTranslateUrl
+    : `http://${rawLibreTranslateUrl}`
+  : "http://localhost:5000";
+const HAS_OWN_LIBRETRANSLATE = !!rawLibreTranslateUrl;
 const LIBRETRANSLATE_API_KEY = process.env.LIBRETRANSLATE_API_KEY || "";
 const MYMEMORY_EMAIL = process.env.MYMEMORY_EMAIL || ""; // opcional: sube el limite diario de 5000 a 10000 palabras
 
@@ -83,8 +91,11 @@ async function translateWithDeepL(text, sourceLang, targetLang, apiKey) {
   return data.translations?.[0]?.text || "";
 }
 
-// provider: "mymemory" (gratis, por defecto, cero configuracion) | "libretranslate" (self-hosted,
-// requiere LIBRETRANSLATE_URL propio) | "deepl" (premium, requiere apiKey del cliente)
+// provider: "mymemory" (gratis sin configuracion, pero con cuota compartida poco fiable
+// en IPs de hosting) | "libretranslate" (self-hosted, forzado explicitamente) | "deepl"
+// (premium, requiere apiKey del cliente).
+// Si hay un LibreTranslate propio configurado (LIBRETRANSLATE_URL), se prioriza sobre
+// MyMemory aunque el cliente pida "mymemory": es gratis, ilimitado y no depende de terceros.
 async function translateText(text, sourceLang, targetLang, provider = "mymemory", apiKey = "") {
   if (!text || !text.trim()) return "";
   if (sourceLang === targetLang) return text;
@@ -92,7 +103,7 @@ async function translateText(text, sourceLang, targetLang, provider = "mymemory"
   if (provider === "deepl") {
     return translateWithDeepL(text, sourceLang, targetLang, apiKey);
   }
-  if (provider === "libretranslate") {
+  if (provider === "libretranslate" || HAS_OWN_LIBRETRANSLATE) {
     return translateWithLibreTranslate(text, sourceLang, targetLang);
   }
   return translateWithMyMemory(text, sourceLang, targetLang);
