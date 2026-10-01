@@ -10,6 +10,7 @@ const { translateText } = require("./translate");
 const PORT = process.env.PORT || 3000;
 
 const app = express();
+app.set("trust proxy", 1); // Render/otros PaaS terminan TLS en su proxy; necesario para que req.protocol sea "https"
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "..", "public")));
 
