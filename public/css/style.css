@@ -1,0 +1,114 @@
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --accent: #38bdf8;
+  --accent-dark: #0284c7;
+  --danger: #f87171;
+  --success: #4ade80;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  display: flex;
+  justify-content: center;
+}
+
+#app {
+  width: 100%;
+  max-width: 480px;
+  padding: 1rem 1rem 3rem;
+}
+
+.hidden { display: none !important; }
+
+h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
+h2, h3 { margin-top: 0; }
+.subtitle { color: var(--muted); margin-top: 0; }
+
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.btn {
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 10px;
+  border: none;
+  background: #334155;
+  color: var(--text);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btn-primary { background: var(--accent-dark); font-weight: 600; }
+.btn-link { background: transparent; color: var(--accent); text-decoration: underline; }
+
+.btn-ptt {
+  background: var(--accent-dark);
+  font-weight: 600;
+  padding: 1.4rem;
+  font-size: 1.1rem;
+  user-select: none;
+  touch-action: none;
+}
+.btn-ptt.active { background: var(--danger); }
+
+select, input[type="text"], input#join-code {
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+label { display: block; margin-bottom: 0.25rem; font-size: 0.9rem; color: var(--muted); }
+
+.join-row { display: flex; gap: 0.5rem; }
+.join-row input { margin-bottom: 0; }
+.join-row .btn { width: auto; padding: 0.7rem 1rem; }
+
+.toggle-row { display: flex; align-items: center; gap: 0.5rem; color: var(--text); font-size: 0.95rem; }
+.toggle-row input { width: auto; margin: 0; }
+
+.hint { color: var(--muted); font-size: 0.8rem; margin: 0.25rem 0 0; }
+
+.room-code { font-size: 2rem; letter-spacing: 0.2rem; font-weight: 700; text-align: center; }
+#room-qr { display: block; margin: 0 auto; border-radius: 8px; }
+
+.room-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.peer-status.connected { color: var(--success); }
+
+.transcript {
+  max-height: 50vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.msg { padding: 0.6rem 0.8rem; border-radius: 10px; font-size: 0.95rem; }
+.msg-own { background: #0c4a6e; align-self: flex-end; }
+.msg-remote { background: #374151; align-self: flex-start; }
+.msg-interim { opacity: 0.6; font-style: italic; }
+.msg-discarded { opacity: 0.4; text-decoration: line-through; }

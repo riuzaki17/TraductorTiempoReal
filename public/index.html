@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>VoiceMeet Translate</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <main id="app">
+
+    <section id="screen-home" class="screen">
+      <h1>VoiceMeet Translate</h1>
+      <p class="subtitle">Traducción de voz en tiempo real entre dos móviles</p>
+
+      <div class="card">
+        <button id="btn-create" class="btn btn-primary">Crear reunión</button>
+        <div id="create-result" class="hidden">
+          <p>Código de sala:</p>
+          <p id="room-code" class="room-code"></p>
+          <img id="room-qr" alt="QR de la sala" />
+          <p class="hint">Comparte el código o que tu interlocutor escanee el QR</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <label for="join-code">Unirme con un código</label>
+        <div class="join-row">
+          <input id="join-code" inputmode="numeric" maxlength="6" placeholder="123456" />
+          <button id="btn-join" class="btn">Unirme</button>
+        </div>
+      </div>
+
+      <button id="btn-settings" class="btn btn-link">Ajustes avanzados (gratis / premium)</button>
+    </section>
+
+    <section id="screen-settings" class="screen hidden">
+      <h2>Ajustes</h2>
+
+      <div class="card">
+        <h3>Traducción</h3>
+        <label class="toggle-row">
+          <input type="checkbox" id="toggle-deepl" />
+          Usar DeepL (premium) en vez de LibreTranslate (gratis)
+        </label>
+        <div id="deepl-key-row" class="hidden">
+          <label for="deepl-key">API key de DeepL</label>
+          <input id="deepl-key" type="text" placeholder="xxxxxxxx-xxxx-...:fx" />
+          <p class="hint">Gratis hasta 500k caracteres (bono único) en deepl.com/pro-api</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Verificación de voz (modo auriculares)</h3>
+        <label class="toggle-row">
+          <input type="checkbox" id="toggle-eagle" />
+          Usar Picovoice Eagle (premium) en vez de la heurística gratis
+        </label>
+        <div id="eagle-key-row" class="hidden">
+          <label for="eagle-key">AccessKey de Picovoice</label>
+          <input id="eagle-key" type="text" placeholder="AccessKey de console.picovoice.ai" />
+          <p class="hint">Gratis: 100 min/mes, 3 usuarios. Requiere eagle_params.pv (ver README)</p>
+        </div>
+      </div>
+
+      <button id="btn-settings-back" class="btn">Volver</button>
+    </section>
+
+    <section id="screen-room" class="screen hidden">
+      <header class="room-header">
+        <span id="room-header-code"></span>
+        <span id="peer-status" class="peer-status">Esperando al otro participante...</span>
+      </header>
+
+      <div class="card">
+        <label for="lang-speak">Hablo en</label>
+        <select id="lang-speak"></select>
+        <label for="lang-listen">Quiero escuchar en</label>
+        <select id="lang-listen"></select>
+      </div>
+
+      <div class="card">
+        <label class="toggle-row">
+          <input type="checkbox" id="toggle-headset" />
+          Uso auriculares (modo automático)
+        </label>
+
+        <div id="manual-mode">
+          <button id="btn-ptt" class="btn btn-ptt">Mantén pulsado para hablar</button>
+        </div>
+
+        <div id="auto-mode" class="hidden">
+          <button id="btn-enroll" class="btn">Calibrar mi voz</button>
+          <p id="auto-status" class="hint">Calibra tu voz antes de activar el modo automático</p>
+        </div>
+      </div>
+
+      <div id="transcript" class="transcript card"></div>
+    </section>
+
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

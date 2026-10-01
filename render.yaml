@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: voicemeet-translate
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: LIBRETRANSLATE_URL
+        value: https://translate.terraprint.co
+      - key: NODE_VERSION
+        value: 22.14.0
