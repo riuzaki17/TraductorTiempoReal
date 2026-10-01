@@ -6,6 +6,7 @@ export const LANGUAGES = [
   { code: "de", label: "Deutsch", srLang: "de-DE" },
   { code: "it", label: "Italiano", srLang: "it-IT" },
   { code: "pt", label: "Português", srLang: "pt-PT" },
+  { code: "ja", label: "日本語", srLang: "ja-JP" },
 ];
 
 export function srLangFor(code) {

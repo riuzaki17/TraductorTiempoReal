@@ -7,7 +7,7 @@ services:
     environment:
       # Idiomas que vamos a usar en el MVP. Reduce el tiempo de arranque
       # (si no se fija, descarga los modelos de TODOS los idiomas).
-      - LT_LOAD_ONLY=es,en,fr,de,it,pt
+      - LT_LOAD_ONLY=es,en,fr,de,it,pt,ja
       - LT_DISABLE_WEB_UI=true
     volumes:
       - libretranslate-models:/home/libretranslate/.local

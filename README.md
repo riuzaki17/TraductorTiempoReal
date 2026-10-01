@@ -28,6 +28,12 @@ Dos cosas intercambiables entre **gratis** y **premium** (toggle en "Ajustes ava
 | Traducción | LibreTranslate self-hosted (ilimitado) | DeepL API (tu propia key) |
 | Verificación de voz (modo auriculares) | Heurística de huella espectral (sin key) | Picovoice Eagle (tu propia AccessKey) |
 
+## Idiomas soportados
+
+Español, English, Français, Deutsch, Italiano, Português, 日本語 (`public/js/languages.js`).
+Añadir uno nuevo: agregarlo ahí (con su código `srLang` para Web Speech API) y a
+`LT_LOAD_ONLY` en `docker-compose.yml` si usas LibreTranslate self-hosted.
+
 ## Requisitos
 
 - Node.js 18+
@@ -46,6 +52,23 @@ cd server
 npm install
 npm start
 ```
+
+### Si no puedes usar Docker (como en el despliegue de Render)
+
+LibreTranslate ya **no** tiene un endpoint público sin API key (lo tenía hasta hace
+poco, pero ahora bloquea el abuso de bots). La alternativa gratis sigue siendo
+oficial y estable:
+
+1. Crea una cuenta gratis en [portal.libretranslate.com](https://portal.libretranslate.com)
+   (100.000 caracteres/mes, sin tarjeta).
+2. Copia tu API key y configura estas variables de entorno:
+   ```
+   LIBRETRANSLATE_URL=https://libretranslate.com
+   LIBRETRANSLATE_API_KEY=tu_api_key
+   ```
+En Render: Dashboard → tu servicio → "Environment" → añade `LIBRETRANSLATE_API_KEY`
+(ya está declarada en `render.yaml` como `sync: false`, así que Render te la pedirá
+al desplegar en vez de guardarla en el repo).
 
 Abre `http://localhost:3000` en el navegador.
 

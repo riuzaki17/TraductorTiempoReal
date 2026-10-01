@@ -8,6 +8,8 @@ services:
     startCommand: npm start
     envVars:
       - key: LIBRETRANSLATE_URL
-        value: https://translate.terraprint.co
+        value: https://libretranslate.com
+      - key: LIBRETRANSLATE_API_KEY
+        sync: false # se introduce manualmente en el dashboard de Render, no se commitea (gratis: portal.libretranslate.com)
       - key: NODE_VERSION
         value: 22.14.0
