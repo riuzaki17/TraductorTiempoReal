@@ -25,7 +25,7 @@ function joinRoom(code, peerId, ws) {
   const room = rooms.get(code);
   if (!room) return null;
   if (room.peers.size >= 2) return null; // solo 2 participantes por sala
-  room.peers.set(peerId, { ws, lang: null, listenLang: null, provider: "libretranslate", apiKey: "" });
+  room.peers.set(peerId, { ws, lang: null, listenLang: null, provider: "mymemory", apiKey: "" });
   return room;
 }
 

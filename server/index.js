@@ -80,7 +80,7 @@ wss.on("connection", (ws) => {
       peer.listenLang = msg.listenLang;
       // Preferencia de traducción de ESTE participante: afecta a cómo se traduce
       // el texto que recibe (el emisor nunca necesita su propia API key ajena).
-      peer.provider = msg.provider === "deepl" ? "deepl" : "libretranslate";
+      peer.provider = ["deepl", "libretranslate"].includes(msg.provider) ? msg.provider : "mymemory";
       peer.apiKey = typeof msg.apiKey === "string" ? msg.apiKey : "";
       return;
     }
@@ -122,7 +122,11 @@ wss.on("connection", (ws) => {
         );
       } catch (err) {
         console.error("Error de traduccion:", err.message);
-        send({ type: "translate-error", message: err.message });
+        // Avisamos a los dos: quien habló (para que sepa que no llegó traducido)
+        // y quien escucha (para que no se quede esperando en silencio).
+        const errMsg = JSON.stringify({ type: "translate-error", message: err.message });
+        send(errMsg);
+        receiver.ws.send(errMsg);
       }
       return;
     }

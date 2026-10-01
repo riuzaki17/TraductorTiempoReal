@@ -13,7 +13,7 @@ idioma habla y en qué idioma quiere escuchar al otro.
  texto ──── WebSocket ──► Servidor Node.js ──────────┘
                              │  (sala + traducción)
                              ▼
-                    LibreTranslate (gratis, self-hosted)
+                    MyMemory (gratis, sin key, por defecto)
                        o DeepL (premium, API key propia)
 ```
 
@@ -25,8 +25,24 @@ Dos cosas intercambiables entre **gratis** y **premium** (toggle en "Ajustes ava
 
 | | Gratis (por defecto) | Premium |
 |---|---|---|
-| Traducción | LibreTranslate self-hosted (ilimitado) | DeepL API (tu propia key) |
+| Traducción | MyMemory (sin key, ~5000 palabras/día) | DeepL API (tu propia key) |
 | Verificación de voz (modo auriculares) | Heurística de huella espectral (sin key) | Picovoice Eagle (tu propia AccessKey) |
+
+### Historial de lo que NO resultó ser gratis (para que no pierdas tiempo)
+
+Durante el desarrollo probamos varias opciones de traducción "gratis" que resultaron
+no serlo o no ser fiables, por si te encuentras las mismas referencias buscando por tu cuenta:
+
+- **LibreTranslate nube oficial** (`libretranslate.com`): requiere API key de pago.
+  La documentación menciona un tier gratis via `portal.libretranslate.com`, pero en
+  la práctica el alta pide método de pago.
+- **Instancias comunitarias gratuitas** (`translate.terraprint.co` y similares): no
+  tienen garantía de disponibilidad — la que probamos estaba caída (502) al validar.
+- **DeepL "API Free"**: el plan recurrente gratuito ya no se puede contratar; las
+  keys nuevas solo dan un bono único de caracteres para pruebas.
+
+Lo único verificado en vivo y gratis sin registro ni tarjeta: **MyMemory** (usado por
+defecto) y **LibreTranslate self-hosted con Docker** (ilimitado, pero necesitas Docker).
 
 ## Idiomas soportados
 
@@ -37,40 +53,34 @@ Añadir uno nuevo: agregarlo ahí (con su código `srLang` para Web Speech API) 
 ## Requisitos
 
 - Node.js 18+
-- Docker (para LibreTranslate self-hosted; es la opción gratis)
 - Chrome en Android en ambos móviles (el MVP ignora iPhone: Safari/iOS no soporta
   bien el reconocimiento de voz del navegador)
+- Docker, opcional (solo si quieres LibreTranslate self-hosted en vez de MyMemory)
 
-## Puesta en marcha (modo gratis)
+## Puesta en marcha (modo gratis, cero configuración)
 
 ```bash
-# 1. Traducción (gratis, self-hosted). Tarda un rato la primera vez (descarga modelos).
-docker compose up -d
-
-# 2. Backend
 cd server
 npm install
 npm start
 ```
 
-### Si no puedes usar Docker (como en el despliegue de Render)
+Abre `http://localhost:3000` en el navegador. La traducción funciona de inmediato
+con MyMemory, sin registrarte en nada.
 
-LibreTranslate ya **no** tiene un endpoint público sin API key (lo tenía hasta hace
-poco, pero ahora bloquea el abuso de bots). La alternativa gratis sigue siendo
-oficial y estable:
+### Si necesitas más de ~5000 palabras/día (límite de MyMemory)
 
-1. Crea una cuenta gratis en [portal.libretranslate.com](https://portal.libretranslate.com)
-   (100.000 caracteres/mes, sin tarjeta).
-2. Copia tu API key y configura estas variables de entorno:
-   ```
-   LIBRETRANSLATE_URL=https://libretranslate.com
-   LIBRETRANSLATE_API_KEY=tu_api_key
-   ```
-En Render: Dashboard → tu servicio → "Environment" → añade `LIBRETRANSLATE_API_KEY`
-(ya está declarada en `render.yaml` como `sync: false`, así que Render te la pedirá
-al desplegar en vez de guardarla en el repo).
+La alternativa realmente ilimitada y gratis es LibreTranslate **self-hosted**
+(no la nube oficial, que ahora es de pago):
 
-Abre `http://localhost:3000` en el navegador.
+```bash
+docker compose up -d   # tarda un rato la primera vez (descarga modelos)
+```
+
+Y cambia el proveedor por defecto a `"libretranslate"` en `server/rooms.js`
+(`peer.provider`), o añade una opción en el toggle de ajustes si vas a usarlo con
+frecuencia. Variables de entorno: `LIBRETRANSLATE_URL` (por defecto
+`http://localhost:5000`) y `LIBRETRANSLATE_API_KEY` (solo si tu instancia la exige).
 
 ## Probar con dos móviles reales (importante)
 

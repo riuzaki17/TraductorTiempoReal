@@ -57,7 +57,7 @@ function sendLanguageConfig() {
     type: "set-languages",
     lang: speakLang,
     listenLang,
-    provider: settings.useDeepL ? "deepl" : "libretranslate",
+    provider: settings.useDeepL ? "deepl" : "mymemory",
     apiKey: settings.useDeepL ? settings.deeplKey : "",
   });
 }

@@ -7,9 +7,9 @@ services:
     buildCommand: npm install
     startCommand: npm start
     envVars:
-      - key: LIBRETRANSLATE_URL
-        value: https://libretranslate.com
-      - key: LIBRETRANSLATE_API_KEY
-        sync: false # se introduce manualmente en el dashboard de Render, no se commitea (gratis: portal.libretranslate.com)
       - key: NODE_VERSION
         value: 22.14.0
+      # Sin variables de traduccion: por defecto usa MyMemory (gratis, sin key, ver server/translate.js).
+      # Si tienes tu propio LibreTranslate self-hosted, puedes apuntar aqui:
+      # - key: LIBRETRANSLATE_URL
+      #   value: https://tu-instancia-propia.example.com
